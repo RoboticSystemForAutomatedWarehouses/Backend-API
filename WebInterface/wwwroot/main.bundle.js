@@ -501,12 +501,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__pipes_order_total_pipe__ = __webpack_require__("./src/app/pipes/order-total.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pipes_sort_by_key_pipe__ = __webpack_require__("./src/app/pipes/sort-by-key.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__account_edit_profile_edit_profile_component__ = __webpack_require__("./src/app/account/edit-profile/edit-profile.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__services_loading_service__ = __webpack_require__("./src/app/services/loading.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -629,7 +631,8 @@ var AppModule = /** @class */ (function () {
                     provide: __WEBPACK_IMPORTED_MODULE_6__angular_common_http__["a" /* HTTP_INTERCEPTORS */],
                     useClass: __WEBPACK_IMPORTED_MODULE_21__authentication_interceptor__["a" /* AuthenticationInterceptor */],
                     multi: true
-                }
+                },
+                __WEBPACK_IMPORTED_MODULE_31__services_loading_service__["a" /* LoadingService */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_11__app_component__["a" /* AppComponent */]]
         })
@@ -652,6 +655,7 @@ var AppModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_authentication_service__ = __webpack_require__("./src/app/services/authentication.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_remote_url__ = __webpack_require__("./src/app/models/remote-url.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_loading_service__ = __webpack_require__("./src/app/services/loading.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -667,18 +671,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /** Pass untouched request through to the next request handler. */
 var AuthenticationInterceptor = /** @class */ (function () {
-    function AuthenticationInterceptor(service, router) {
+    function AuthenticationInterceptor(service, router, loading) {
         this.service = service;
         this.router = router;
+        this.loading = loading;
     }
     AuthenticationInterceptor.prototype.intercept = function (req, next) {
         var _this = this;
+        this.loading.IsLoading = true;
         req = req.clone({ withCredentials: true });
         var handler;
         if (req.url === __WEBPACK_IMPORTED_MODULE_4__models_remote_url__["a" /* RemoteUrl */].Account.Logout || req.url === __WEBPACK_IMPORTED_MODULE_4__models_remote_url__["a" /* RemoteUrl */].Account.Login) {
             handler = next.handle(req).map(function (event) {
+                _this.loading.IsLoading = false;
                 if (event instanceof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["e" /* HttpResponse */] && event.status === 200) {
                     var res = event.body;
                     if (res.success) {
@@ -692,6 +700,7 @@ var AuthenticationInterceptor = /** @class */ (function () {
             handler = next.handle(req);
         }
         return handler.catch(function (err, caught) {
+            _this.loading.IsLoading = false;
             if (err instanceof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpErrorResponse */] && err.status === 401) {
                 _this.handleNotAuthorized();
                 return;
@@ -707,7 +716,8 @@ var AuthenticationInterceptor = /** @class */ (function () {
     AuthenticationInterceptor = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__services_authentication_service__["a" /* AuthenticationService */],
-            __WEBPACK_IMPORTED_MODULE_5__angular_router__["c" /* Router */]])
+            __WEBPACK_IMPORTED_MODULE_5__angular_router__["c" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_6__services_loading_service__["a" /* LoadingService */]])
     ], AuthenticationInterceptor);
     return AuthenticationInterceptor;
 }());
@@ -932,7 +942,7 @@ module.exports = ".speech-bubble {\r\n    position: relative;\r\n    background:
 /***/ "./src/app/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"displayImage\" class=\"bgded\" style=\"background-image:url('/assets/img/2.jpg');background-repeat: round;\">\r\n    <div id=\"pageintro\" class=\"hoc clear\"></div>\r\n</div>\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<div class=\"wrapper row0\">\r\n    <div id=\"topbar\" class=\"hoc clear\">\r\n        <div class=\"fl_left\">\r\n            <ul class=\"nospace\">\r\n                <li><i class=\"fa fa-clock-o\"></i> Mon. - Fri. 8am - 5pm</li>\r\n                <li><i class=\"fa fa-phone\"></i> +00 (123) 456 7890</li>\r\n                <li><i class=\"fa fa-envelope-o\"></i> info@domain.com</li>\r\n            </ul>\r\n        </div>\r\n        <div class=\"fl_right\">\r\n            <ul class=\"nospace\">\r\n                <li><a title=\"Home\" routerLink=\"/home\"><i class=\"fa fa-lg fa-home\"></i></a></li>\r\n                <li><a title=\"Login\" routerLink=\"/login\"><i class=\"fa fa-lg fa-sign-in\"></i></a></li>\r\n                <li><a title=\"Sign Up\" routerLink=\"/register\"><i class=\"fa fa-lg fa-edit\"></i></a></li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<div class=\"wrapper row1\">\r\n    <div class=\"hoc clear row\">\r\n        <div id=\"mini\">\r\n        </div>\r\n        <div id=\"t\" class=\"rtl text text-right\">\r\n            <p>\r\n                {{message}}\r\n            </p>\r\n        </div>\r\n    </div>\r\n    <header id=\"header\" class=\"hoc clear\">\r\n        <div id=\"logo\" class=\"fl_left\">\r\n            <h1><a>Automated Warehouse</a></h1>\r\n        </div>\r\n        <nav id=\"mainav\" class=\"fl_right\">\r\n            <ul class=\"clear\">\r\n                <li><a routerLink=\"/home\">Home</a></li>\r\n                <li> <a routerLink=\"/services\">Services</a> </li>\r\n                <!-- <li> <a routerLink=\"/about\">About Us</a> </li> -->\r\n                <!-- <li> <a routerLink=\"/contact\">Call us</a> </li> -->\r\n                <ng-container *ngIf=\"authenticationService.isAuthenticated; else unAuthenticatedTemplate \">\r\n                    <li> <a routerLink=\"/account\">Account</a> </li>\r\n                    <li> <a routerLink=\"/logout\">Logout</a> </li>\r\n                </ng-container>\r\n                <ng-template #unAuthenticatedTemplate>\r\n                    <li> <a routerLink=\"/login\">Login</a> </li>\r\n                    <li> <a routerLink=\"/register\">Register</a> </li>\r\n                </ng-template>\r\n                <!-- <li><a class=\"drop\" >Dropdown</a>\r\n                    <ul>\r\n                        <li><a >Level 2</a></li>\r\n                        <li><a class=\"drop\" >Level 2 + Drop</a>\r\n                            <ul>\r\n                                <li><a >Level 3</a></li>\r\n                                <li><a >Level 3</a></li>\r\n                                <li><a >Level 3</a></li>\r\n                            </ul>\r\n                        </li>\r\n                        <li><a >Level 2</a></li>\r\n                    </ul>\r\n                </li> -->\r\n            </ul>\r\n        </nav>\r\n    </header>\r\n</div>"
+module.exports = "<div *ngIf=\"displayImage\" class=\"bgded\" style=\"background-image:url('/assets/img/2.jpg');background-repeat: round;\">\r\n    <div id=\"pageintro\" class=\"hoc clear\"></div>\r\n</div>\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<div class=\"wrapper row0\">\r\n    <div id=\"topbar\" class=\"hoc clear\">\r\n        <div class=\"fl_left\">\r\n            <ul class=\"nospace\">\r\n                <li><i class=\"fa fa-clock-o\"></i> Mon. - Fri. 8am - 5pm</li>\r\n                <li><i class=\"fa fa-phone\"></i> +00 (123) 456 7890</li>\r\n                <li><i class=\"fa fa-envelope-o\"></i> info@domain.com</li>\r\n            </ul>\r\n        </div>\r\n        <div class=\"fl_right\">\r\n            <ul class=\"nospace\">\r\n                <li><a title=\"Home\" routerLink=\"/home\"><i class=\"fa fa-lg fa-home\"></i></a></li>\r\n                <li><a title=\"Login\" routerLink=\"/login\"><i class=\"fa fa-lg fa-sign-in\"></i></a></li>\r\n                <li><a title=\"Sign Up\" routerLink=\"/register\"><i class=\"fa fa-lg fa-edit\"></i></a></li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<!-- ################################################################################################ -->\r\n<div class=\"wrapper row1\">\r\n    <!-- <div *ngIf=\"loading.IsLoading\" class=\"hoc clear row\">\r\n        <div id=\"mini\">\r\n        </div>\r\n        <div id=\"t\" class=\"rtl text text-right\">\r\n            <p>\r\n                {{message}}\r\n            </p>\r\n        </div>\r\n    </div> -->\r\n    <header id=\"header\" class=\"hoc clear\">\r\n        <div id=\"logo\" class=\"fl_left\">\r\n            <h1><a>Automated Warehouse</a></h1>\r\n        </div>\r\n        <nav id=\"mainav\" class=\"fl_right\">\r\n            <ul class=\"clear\">\r\n                <li><a routerLink=\"/home\">Home</a></li>\r\n                <li> <a routerLink=\"/services\">Services</a> </li>\r\n                <!-- <li> <a routerLink=\"/about\">About Us</a> </li> -->\r\n                <!-- <li> <a routerLink=\"/contact\">Call us</a> </li> -->\r\n                <ng-container *ngIf=\"authenticationService.isAuthenticated; else unAuthenticatedTemplate \">\r\n                    <li> <a routerLink=\"/account\">Account</a> </li>\r\n                    <li> <a routerLink=\"/logout\">Logout</a> </li>\r\n                </ng-container>\r\n                <ng-template #unAuthenticatedTemplate>\r\n                    <li> <a routerLink=\"/login\">Login</a> </li>\r\n                    <li> <a routerLink=\"/register\">Register</a> </li>\r\n                </ng-template>\r\n                <!-- <li><a class=\"drop\" >Dropdown</a>\r\n                    <ul>\r\n                        <li><a >Level 2</a></li>\r\n                        <li><a class=\"drop\" >Level 2 + Drop</a>\r\n                            <ul>\r\n                                <li><a >Level 3</a></li>\r\n                                <li><a >Level 3</a></li>\r\n                                <li><a >Level 3</a></li>\r\n                            </ul>\r\n                        </li>\r\n                        <li><a >Level 2</a></li>\r\n                    </ul>\r\n                </li> -->\r\n            </ul>\r\n        </nav>\r\n    </header>\r\n</div>"
 
 /***/ }),
 
@@ -944,6 +954,7 @@ module.exports = "<div *ngIf=\"displayImage\" class=\"bgded\" style=\"background
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_authentication_service__ = __webpack_require__("./src/app/services/authentication.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_loading_service__ = __webpack_require__("./src/app/services/loading.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -956,29 +967,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent(authenticationService, route, router) {
+    function HeaderComponent(authenticationService, route, router, loading) {
         var _this = this;
         this.authenticationService = authenticationService;
         this.route = route;
         this.router = router;
+        this.loading = loading;
         this.messages = [
-            'عاملين ايه على الغدا؟',
-            'كان فيه ماتش ايه اليوم؟',
-            'الarm اتكسرت ولا لسا؟',
-            'هنفطر ايه النهارده؟',
-            'هنتقابل ايمتى مع التيم؟',
-            'شهاب جاي ولا مش جاي؟',
-            'كيف بدأ الخلق؟',
-            'انا مين؟',
-            'شرف فين؟'
+            'loading',
+            'loading.',
+            'loading..',
+            'loading...'
         ];
         this.message = this.messages[0];
         var i = 0;
         setInterval(function () {
             _this.message = _this.messages[i];
             i = (i + 1) % _this.messages.length;
-        }, 3000);
+        }, 1000);
     }
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -997,7 +1005,10 @@ var HeaderComponent = /** @class */ (function () {
             template: __webpack_require__("./src/app/header/header.component.html"),
             styles: [__webpack_require__("./src/app/header/header.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_authentication_service__["a" /* AuthenticationService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_authentication_service__["a" /* AuthenticationService */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_3__services_loading_service__["a" /* LoadingService */]])
     ], HeaderComponent);
     return HeaderComponent;
 }());
@@ -1232,7 +1243,7 @@ var RemoteUrl = /** @class */ (function () {
     RemoteUrl.News = function (count) {
         return this.BaseUrl + 'News/List/?count=' + count.toString();
     };
-    RemoteUrl.BaseUrl = 'http://192.168.10.17:5000/api/';
+    RemoteUrl.BaseUrl = '/api/';
     RemoteUrl.Warehouse = RemoteUrl.BaseUrl + 'Warehouse/List';
     RemoteUrl.Account = {
         Login: RemoteUrl.BaseUrl + 'Account/Login',
@@ -1772,6 +1783,37 @@ var AuthenticationService = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], AuthenticationService);
     return AuthenticationService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/loading.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoadingService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var LoadingService = /** @class */ (function () {
+    function LoadingService() {
+        this.IsLoading = false;
+    }
+    LoadingService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], LoadingService);
+    return LoadingService;
 }());
 
 
